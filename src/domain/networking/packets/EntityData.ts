@@ -13,6 +13,7 @@ import { EntityPropertyFlags } from "../../entities/EntityPropertyFlags";
 import { EntityType } from "../../entities/EntityTypes";
 import ModelEntityItem, { ModelEntitySubclassData, AnimationProperties } from "../../entities/ModelEntityItem";
 import ShapeEntityItem, { ShapeEntitySubclassData, Shape } from "../../entities/ShapeEntityItem";
+import TextEntityItem, { TextEntitySubclassData } from "../../entities/TextEntityItem";
 import AACube from "../../shared/AACube";
 import assert from "../../shared/assert";
 import ByteCountCoded from "../../shared/ByteCountCoded";
@@ -126,7 +127,7 @@ type EntityDataDetails = {
     alpha?: number | undefined;
 };
 
-type EntitySubclassData = ModelEntitySubclassData | ShapeEntitySubclassData;
+type EntitySubclassData = ModelEntitySubclassData | ShapeEntitySubclassData | TextEntitySubclassData;
 
 type ParsedData = {
     bytesRead: number;
@@ -499,7 +500,11 @@ const EntityData = new class {
             const entityType = codec.data;
 
             // WEBRTC TODO: Unnecessary check once all entity types are supported.
-            if (!(entityType === EntityType.Model || entityType === EntityType.Shape)) {
+            if (!(
+                entityType === EntityType.Model
+                || entityType === EntityType.Shape
+                || EntityType.Text
+            )) {
                 const errorMessage = `Entity type is not supported: ${entityType}`;
                 console.error(errorMessage);
                 throw new Error(errorMessage);
@@ -1184,6 +1189,9 @@ const EntityData = new class {
                     break;
                 case EntityType.Model:
                     subclassData = ModelEntityItem.readEntitySubclassDataFromBuffer(data, dataPosition, propertyFlags);
+                    break;
+                case EntityType.Text:
+                    subclassData = TextEntityItem.readEntitySubclassDataFromBuffer(data, dataPosition, propertyFlags);
                     break;
                 default:
                     // WEBRTC TODO: This line will be unreachable once all entity types are supported.
