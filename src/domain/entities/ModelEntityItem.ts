@@ -407,4 +407,4 @@ class ModelEntityItem {
 }
 
 export default ModelEntityItem;
-export type { ModelEntitySubclassData, AnimationProperties };
+export type { ModelEntitySubclassData, AnimationProperties, ModelEntityProperties };

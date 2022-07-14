@@ -11,12 +11,11 @@
 
 import { EntityPropertyFlags } from "../../entities/EntityPropertyFlags";
 import { EntityType } from "../../entities/EntityTypes";
-import ModelEntityItem, { ModelEntitySubclassData, AnimationProperties } from "../../entities/ModelEntityItem";
-import ShapeEntityItem, { ShapeEntitySubclassData, Shape } from "../../entities/ShapeEntityItem";
+import ModelEntityItem, { ModelEntitySubclassData, ModelEntityProperties } from "../../entities/ModelEntityItem";
+import ShapeEntityItem, { ShapeEntitySubclassData, ShapeEntityProperties } from "../../entities/ShapeEntityItem";
 import AACube from "../../shared/AACube";
 import assert from "../../shared/assert";
 import ByteCountCoded from "../../shared/ByteCountCoded";
-import type { color } from "../../shared/Color";
 import "../../shared/DataViewExtensions";
 import GLMHelpers from "../../shared/GLMHelpers";
 import PropertyFlags from "../../shared/PropertyFlags";
@@ -28,7 +27,7 @@ import UDT from "../udt/UDT";
 import { ungzip } from "pako";
 
 
-type EntityDataDetails = {
+type EntityCommonData = {
     entityItemID: Uuid,
     entityType: EntityType,
     createdFromBuffer: bigint,
@@ -107,26 +106,11 @@ type EntityDataDetails = {
     certificateID: string | undefined;
     certificateType: string | undefined;
     staticCertificateVersion: number | undefined;
-    shapeType?: number | undefined;
-    compoundShapeURL?: string | undefined;
-    color?: color | undefined;
-    textures?: string | undefined;
-    modelURL?: string | undefined;
-    modelScale?: vec3 | undefined;
-    jointRotationsSet?: boolean[] | undefined;
-    jointRotations?: quat[] | undefined;
-    jointTranslationsSet?: boolean[] | undefined;
-    jointTranslations?: vec3[] | undefined;
-    groupCulled?: boolean | undefined;
-    relayParentJoints?: boolean | undefined;
-    blendShapeCoefficients?: string | undefined;
-    useOriginalPivot?: boolean | undefined;
-    animation?: AnimationProperties | undefined;
-    shape?: Shape | undefined;
-    alpha?: number | undefined;
 };
 
 type EntitySubclassData = ModelEntitySubclassData | ShapeEntitySubclassData;
+
+type EntityDataDetails = EntityCommonData | ShapeEntityProperties | ModelEntityProperties;
 
 type ParsedData = {
     bytesRead: number;

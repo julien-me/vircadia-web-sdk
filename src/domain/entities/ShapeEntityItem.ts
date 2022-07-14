@@ -167,4 +167,4 @@ class ShapeEntityItem {
 }
 
 export default ShapeEntityItem;
-export type { ShapeEntitySubclassData, Shape };
+export type { ShapeEntitySubclassData, Shape, ShapeEntityProperties };
