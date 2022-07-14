@@ -14,6 +14,7 @@ import { EntityType } from "../../entities/EntityTypes";
 import ImageEntityItem, { ImageEntitySubclassData } from "../../entities/ImageEntityItem";
 import ModelEntityItem, { ModelEntitySubclassData, AnimationProperties } from "../../entities/ModelEntityItem";
 import ShapeEntityItem, { ShapeEntitySubclassData, Shape } from "../../entities/ShapeEntityItem";
+import WebEntityItem, { WebEntitySubclassData } from "../../entities/WebEntityItem";
 import TextEntityItem, { TextEntitySubclassData } from "../../entities/TextEntityItem";
 import AACube from "../../shared/AACube";
 import assert from "../../shared/assert";
@@ -128,7 +129,11 @@ type EntityDataDetails = {
     alpha?: number | undefined;
 };
 
-type EntitySubclassData = ModelEntitySubclassData | ShapeEntitySubclassData | TextEntitySubclassData | ImageEntitySubclassData;
+type EntitySubclassData = ModelEntitySubclassData
+| ShapeEntitySubclassData
+| TextEntitySubclassData
+| ImageEntitySubclassData
+| WebEntitySubclassData;
 
 type ParsedData = {
     bytesRead: number;
@@ -506,6 +511,7 @@ const EntityData = new class {
                 || entityType === EntityType.Shape
                 || EntityType.Text
                 || EntityType.Image
+                || EntityType.Web
             )) {
                 const errorMessage = `Entity type is not supported: ${entityType}`;
                 console.error(errorMessage);
@@ -1197,6 +1203,9 @@ const EntityData = new class {
                     break;
                 case EntityType.Image:
                     subclassData = ImageEntityItem.readEntitySubclassDataFromBuffer(data, dataPosition, propertyFlags);
+                    break;
+                case EntityType.Web:
+                    subclassData = WebEntityItem.readEntitySubclassDataFromBuffer(data, dataPosition, propertyFlags);
                     break;
                 default:
                     // WEBRTC TODO: This line will be unreachable once all entity types are supported.
